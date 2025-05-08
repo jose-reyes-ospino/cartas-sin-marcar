@@ -56,17 +56,17 @@ export default function Tutorial() {
                             <li>
                                 Ve a <a href="https://console.firebase.google.com/" target="_blank" rel="noopener noreferrer" className="text-[#8B2C3B] underline hover:text-[#a13a4a]">Firebase Console</a> y crea un nuevo proyecto:
                                 <ul className="list-disc list-inside ml-6 mt-2 text-[#555]">
-                                    <li>Haz clic en "Crear un proyecto"</li>
-                                    <li>Dale un nombre a tu proyecto (por ejemplo, "cartas-app")</li>
+                                    <li>Haz clic en &quot;Crear un proyecto&quot;</li>
+                                    <li>Dale un nombre a tu proyecto (por ejemplo, &quot;cartas-app&quot;)</li>
                                     <li>Puedes desactivar Google Analytics si no lo necesitas</li>
-                                    <li>Haz clic en "Crear proyecto"</li>
+                                    <li>Haz clic en &quot;Crear proyecto&quot;</li>
                                 </ul>
                             </li>
                             <li>
                                 Agrega una app web y copia la configuración:
                                 <ul className="list-disc list-inside ml-6 mt-2 text-[#555]">
                                     <li>En la página principal del proyecto, haz clic en el ícono de web (&lt;/&gt;)</li>
-                                    <li>Registra tu app con un apodo (por ejemplo, "cartas-web")</li>
+                                    <li>Registra tu app con un apodo (por ejemplo, &quot;cartas-web&quot;)</li>
                                     <li>No necesitas habilitar Firebase Hosting por ahora</li>
                                     <li>Firebase te mostrará un objeto de configuración como este:</li>
                                 </ul>
@@ -84,9 +84,9 @@ export default function Tutorial() {
                             <li>
                                 Configura Firestore:
                                 <ul className="list-disc list-inside ml-6 mt-2 text-[#555]">
-                                    <li>En el menú lateral, ve a "Firestore Database"</li>
-                                    <li>Haz clic en "Crear base de datos"</li>
-                                    <li>Elige "Comenzar en modo de prueba" (podrás cambiar las reglas de seguridad después)</li>
+                                    <li>En el menú lateral, ve a &quot;Firestore Database&quot;</li>
+                                    <li>Haz clic en &quot;Crear base de datos&quot;</li>
+                                    <li>Elige &quot;Comenzar en modo de prueba&quot; (podrás cambiar las reglas de seguridad después)</li>
                                     <li>Selecciona la ubicación del servidor más cercana a tus usuarios</li>
                                 </ul>
                             </li>
