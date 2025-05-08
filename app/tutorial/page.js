@@ -53,12 +53,54 @@ export default function Tutorial() {
                             <h2 className="text-xl font-bold text-[#8B2C3B]">Configurar Firebase en Next.js</h2>
                         </div>
                         <ol className="list-decimal list-inside text-[#222] space-y-3">
-                            <li>Ve a <a href="https://console.firebase.google.com/" target="_blank" rel="noopener noreferrer" className="text-[#8B2C3B] underline hover:text-[#a13a4a]">Firebase Console</a> y crea un nuevo proyecto.</li>
-                            <li>Agrega una app web y copia la configuración, te servirá más adelante.</li>
+                            <li>
+                                Ve a <a href="https://console.firebase.google.com/" target="_blank" rel="noopener noreferrer" className="text-[#8B2C3B] underline hover:text-[#a13a4a]">Firebase Console</a> y crea un nuevo proyecto:
+                                <ul className="list-disc list-inside ml-6 mt-2 text-[#555]">
+                                    <li>Haz clic en "Crear un proyecto"</li>
+                                    <li>Dale un nombre a tu proyecto (por ejemplo, "cartas-app")</li>
+                                    <li>Puedes desactivar Google Analytics si no lo necesitas</li>
+                                    <li>Haz clic en "Crear proyecto"</li>
+                                </ul>
+                            </li>
+                            <li>
+                                Agrega una app web y copia la configuración:
+                                <ul className="list-disc list-inside ml-6 mt-2 text-[#555]">
+                                    <li>En la página principal del proyecto, haz clic en el ícono de web (&lt;/&gt;)</li>
+                                    <li>Registra tu app con un apodo (por ejemplo, "cartas-web")</li>
+                                    <li>No necesitas habilitar Firebase Hosting por ahora</li>
+                                    <li>Firebase te mostrará un objeto de configuración como este:</li>
+                                </ul>
+                                <pre className="bg-[#fff8e1] text-[#8B2C3B] rounded-lg p-3 mt-2 mb-2 overflow-x-auto border border-[#f3e6c1]">
+                                    {`const firebaseConfig = {
+  apiKey: "tu-api-key",
+  authDomain: "tu-proyecto.firebaseapp.com",
+  projectId: "tu-proyecto",
+  storageBucket: "tu-proyecto.appspot.com",
+  messagingSenderId: "tu-sender-id",
+  appId: "tu-app-id"
+};`}
+                                </pre>
+                            </li>
+                            <li>
+                                Configura Firestore:
+                                <ul className="list-disc list-inside ml-6 mt-2 text-[#555]">
+                                    <li>En el menú lateral, ve a "Firestore Database"</li>
+                                    <li>Haz clic en "Crear base de datos"</li>
+                                    <li>Elige "Comenzar en modo de prueba" (podrás cambiar las reglas de seguridad después)</li>
+                                    <li>Selecciona la ubicación del servidor más cercana a tus usuarios</li>
+                                </ul>
+                            </li>
                             <li>Instala Firebase en tu proyecto:
                                 <pre className="bg-[#fff8e1] text-[#8B2C3B] rounded-lg p-3 mt-2 mb-2 overflow-x-auto border border-[#f3e6c1]">npm install firebase</pre>
                             </li>
-                            <li>Crea un archivo <b>.env.local</b> en la raíz y pega tus variables de configuración.</li>
+                            <li>
+                                Crea un archivo <b>.env.local</b> en la raíz y pega tus variables de configuración.
+                                <p className="text-[#555] mt-2">
+                                    El archivo <b>.env.local</b> es un archivo de variables de entorno que Next.js lee automáticamente.
+                                    Las variables que empiezan con <b>NEXT_PUBLIC_</b> son accesibles en el navegador, mientras que las demás
+                                    solo son accesibles en el servidor. Esto es importante para la seguridad de tus credenciales.
+                                </p>
+                            </li>
                             <li>Crea una carpeta <b>firebase</b> y un archivo <b>firebase.js</b> con la configuración:</li>
                         </ol>
                         <pre className="bg-[#fff8e1] text-[#8B2C3B] rounded-lg p-3 overflow-x-auto border border-[#f3e6c1]">
@@ -76,6 +118,39 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export default app;`}
                         </pre>
+
+                        {/* Nueva sección sobre seguridad */}
+                        <div className="mt-8 p-6 bg-[#fff8e1] rounded-xl border border-[#f3e6c1]">
+                            <h3 className="text-lg font-bold text-[#8B2C3B] mb-4">¿Por qué las credenciales de Firebase son públicas?</h3>
+                            <p className="text-[#555] mb-4">
+                                Es normal preguntarse por qué Firebase permite que sus credenciales sean públicas. La respuesta está en su sistema de seguridad por diseño:
+                            </p>
+                            <ul className="list-disc list-inside text-[#555] space-y-3">
+                                <li>
+                                    <b>Reglas de Seguridad:</b> Firebase tiene un sistema de reglas que controla el acceso a los datos, independiente de las credenciales. Por ejemplo:
+                                    <pre className="bg-white text-[#8B2C3B] rounded-lg p-3 mt-2 mb-2 overflow-x-auto border border-[#f3e6c1]">
+                                        {`rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read: if true;  // Cualquiera puede leer
+      allow write: if request.auth != null;  // Solo usuarios autenticados pueden escribir
+    }
+  }
+}`}
+                                    </pre>
+                                </li>
+                                <li>
+                                    <b>Dominios Autorizados:</b> Firebase solo permite conexiones desde dominios que hayas autorizado en la consola. Si alguien intenta usar tus credenciales desde un dominio no autorizado, la conexión será rechazada.
+                                </li>
+                                <li>
+                                    <b>Límites de Uso:</b> Cada proyecto tiene límites de uso que puedes monitorear en la consola. Si alguien intenta abusar de tus credenciales, rápidamente alcanzaría estos límites.
+                                </li>
+                            </ul>
+                            <p className="text-[#555] mt-4">
+                                Las credenciales son específicas del proyecto y no son credenciales de administrador. Solo permiten acceso según las reglas que hayas definido y no dan acceso a otros proyectos de Firebase.
+                            </p>
+                        </div>
                     </section>
 
                     {/* Paso 2 */}
@@ -85,6 +160,11 @@ export default app;`}
                             <h2 className="text-xl font-bold text-[#8B2C3B]">Escribir en Firebase (nueva-carta)</h2>
                         </div>
                         <p className="text-[#222]">Crea una API route en <b>app/api/firestore/route.js</b>:</p>
+                        <p className="text-[#555] mb-4">
+                            En Next.js 13+, el <b>App Router</b> nos permite crear rutas API dentro de la carpeta <b>app</b>.
+                            Los archivos <b>route.js</b> definen endpoints HTTP. En este caso, creamos un endpoint POST
+                            que maneja la creación de nuevas cartas.
+                        </p>
                         <pre className="bg-[#fff8e1] text-[#8B2C3B] rounded-lg p-3 overflow-x-auto border border-[#f3e6c1]">
                             {`import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
 import app from "../../../firebase";
@@ -105,6 +185,11 @@ export async function POST(req) {
 }`}
                         </pre>
                         <p className="text-[#222]">Y el formulario en <b>app/nueva-carta/page.js</b>:</p>
+                        <p className="text-[#555] mb-4">
+                            La directiva <b>'use client'</b> al inicio del archivo indica que este componente se ejecutará en el navegador.
+                            Esto es necesario porque usamos hooks de React y eventos del navegador. Sin esta directiva,
+                            el componente se renderizaría en el servidor y no funcionaría correctamente.
+                        </p>
                         <pre className="bg-[#fff8e1] text-[#8B2C3B] rounded-lg p-3 overflow-x-auto border border-[#f3e6c1]">
                             {`"use client";
 import { useState } from "react";
@@ -143,6 +228,128 @@ export default function NuevaCarta() {
     );
 }`}
                         </pre>
+                        <p className="text-[#555] mt-4">
+                            En este componente usamos varios <b>hooks</b> de React:
+                            <ul className="list-disc list-inside ml-4 mt-2">
+                                <li><b>useState</b>: Para manejar el estado del formulario (nombre, mensaje) y el estado de carga</li>
+                                <li><b>useRouter</b>: Para la navegación programática después de enviar el formulario</li>
+                            </ul>
+                        </p>
+
+                        {/* Nueva sección sobre hooks */}
+                        <div className="mt-8 p-6 bg-[#fff8e1] rounded-xl border border-[#f3e6c1]">
+                            <h3 className="text-lg font-bold text-[#8B2C3B] mb-4">Hooks de React en detalle</h3>
+
+                            <div className="mb-6">
+                                <h4 className="font-semibold text-[#8B2C3B] mb-2">useState</h4>
+                                <p className="text-[#555] mb-2">
+                                    El hook <b>useState</b> es uno de los hooks más fundamentales de React. Nos permite:
+                                </p>
+                                <ul className="list-disc list-inside text-[#555] space-y-2 ml-4">
+                                    <li>Agregar estado local a componentes funcionales</li>
+                                    <li>Mantener valores entre renderizados</li>
+                                    <li>Actualizar la UI cuando el estado cambia</li>
+                                </ul>
+                                <p className="text-[#555] mt-2">
+                                    En nuestro formulario lo usamos así:
+                                </p>
+                                <pre className="bg-white text-[#8B2C3B] rounded-lg p-3 mt-2 mb-2 overflow-x-auto border border-[#f3e6c1]">
+                                    {`const [nombre, setNombre] = useState("");
+const [mensaje, setMensaje] = useState("");
+const [loading, setLoading] = useState(false);`}
+                                </pre>
+                                <p className="text-[#555] mt-2">
+                                    <a href="https://react.dev/reference/react/useState" target="_blank" rel="noopener noreferrer" className="text-[#8B2C3B] underline hover:text-[#a13a4a]">
+                                        📚 Documentación oficial de useState
+                                    </a>
+                                </p>
+                            </div>
+
+                            <div className="mb-6">
+                                <h4 className="font-semibold text-[#8B2C3B] mb-2">useRouter</h4>
+                                <p className="text-[#555] mb-2">
+                                    El hook <b>useRouter</b> es específico de Next.js y nos permite:
+                                </p>
+                                <ul className="list-disc list-inside text-[#555] space-y-2 ml-4">
+                                    <li>Navegar programáticamente entre páginas</li>
+                                    <li>Acceder a información de la ruta actual</li>
+                                    <li>Manipular la URL del navegador</li>
+                                </ul>
+                                <p className="text-[#555] mt-2">
+                                    En nuestro código lo usamos para redirigir después de enviar el formulario:
+                                </p>
+                                <pre className="bg-white text-[#8B2C3B] rounded-lg p-3 mt-2 mb-2 overflow-x-auto border border-[#f3e6c1]">
+                                    {`const router = useRouter();
+// ... después de enviar el formulario
+router.push("/cartas");`}
+                                </pre>
+                                <p className="text-[#555] mt-2">
+                                    <a href="https://nextjs.org/docs/app/api-reference/functions/use-router" target="_blank" rel="noopener noreferrer" className="text-[#8B2C3B] underline hover:text-[#a13a4a]">
+                                        📚 Documentación oficial de useRouter
+                                    </a>
+                                </p>
+                            </div>
+
+                            <div className="mb-6">
+                                <h4 className="font-semibold text-[#8B2C3B] mb-2">useEffect</h4>
+                                <p className="text-[#555] mb-2">
+                                    El hook <b>useEffect</b> nos permite manejar efectos secundarios en componentes funcionales. Es especialmente útil para:
+                                </p>
+                                <ul className="list-disc list-inside text-[#555] space-y-2 ml-4">
+                                    <li>Realizar peticiones a APIs</li>
+                                    <li>Suscribirse a eventos</li>
+                                    <li>Actualizar el DOM manualmente</li>
+                                    <li>Ejecutar código cuando el componente se monta o actualiza</li>
+                                </ul>
+                                <p className="text-[#555] mt-2">
+                                    En nuestro código lo usamos para cargar las cartas cuando el componente se monta:
+                                </p>
+                                <pre className="bg-white text-[#8B2C3B] rounded-lg p-3 mt-2 mb-2 overflow-x-auto border border-[#f3e6c1]">
+                                    {`useEffect(() => {
+    fetch("/api/firestore")
+        .then(res => res.json())
+        .then(data => {
+            setCartas(data);
+            setLoading(false);
+        });
+}, []); // El array vacío significa que solo se ejecuta al montar el componente`}
+                                </pre>
+                                <p className="text-[#555] mt-2">
+                                    El segundo argumento de useEffect (el array vacío <code>[]</code>) es el array de dependencias:
+                                </p>
+                                <ul className="list-disc list-inside text-[#555] space-y-2 ml-4">
+                                    <li><code>[]</code> - El efecto se ejecuta solo al montar el componente</li>
+                                    <li><code>[variable]</code> - El efecto se ejecuta cuando la variable cambia</li>
+                                    <li>Sin array - El efecto se ejecuta en cada renderizado</li>
+                                </ul>
+                                <p className="text-[#555] mt-2">
+                                    <a href="https://react.dev/reference/react/useEffect" target="_blank" rel="noopener noreferrer" className="text-[#8B2C3B] underline hover:text-[#a13a4a]">
+                                        📚 Documentación oficial de useEffect
+                                    </a>
+                                </p>
+                            </div>
+
+                            <div className="mt-6 p-4 bg-white rounded-lg border border-[#f3e6c1]">
+                                <h4 className="font-semibold text-[#8B2C3B] mb-2">Recursos adicionales</h4>
+                                <ul className="list-disc list-inside text-[#555] space-y-2">
+                                    <li>
+                                        <a href="https://react.dev/learn/hooks-overview" target="_blank" rel="noopener noreferrer" className="text-[#8B2C3B] underline hover:text-[#a13a4a]">
+                                            📖 Introducción a los Hooks de React
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="https://react.dev/learn/hooks-custom" target="_blank" rel="noopener noreferrer" className="text-[#8B2C3B] underline hover:text-[#a13a4a]">
+                                            📖 Creando tus propios Hooks
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="https://nextjs.org/docs/app/building-your-application/routing" target="_blank" rel="noopener noreferrer" className="text-[#8B2C3B] underline hover:text-[#a13a4a]">
+                                            📖 Routing en Next.js
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </section>
 
                     {/* Paso 3 */}
@@ -152,6 +359,10 @@ export default function NuevaCarta() {
                             <h2 className="text-xl font-bold text-[#8B2C3B]">Leer de Firebase (cartas)</h2>
                         </div>
                         <p className="text-[#222]">Agrega el método GET en <b>app/api/firestore/route.js</b>:</p>
+                        <p className="text-[#555] mb-4">
+                            Este endpoint GET se ejecuta en el servidor y obtiene todas las cartas de Firestore.
+                            Es una ruta API que devuelve los datos en formato JSON.
+                        </p>
                         <pre className="bg-[#fff8e1] text-[#8B2C3B] rounded-lg p-3 overflow-x-auto border border-[#f3e6c1]">
                             {`export async function GET() {
     const snapshot = await getDocs(collection(firestore, "cartas"));
@@ -160,6 +371,11 @@ export default function NuevaCarta() {
 }`}
                         </pre>
                         <p className="text-[#222]">Y muestra las cartas en <b>app/cartas/page.js</b>:</p>
+                        <p className="text-[#555] mb-4">
+                            Este componente también usa <b>'use client'</b> porque necesita interactividad del navegador.
+                            Utilizamos el hook <b>useEffect</b> para cargar las cartas cuando el componente se monta,
+                            y <b>useState</b> para manejar el estado de las cartas y la carga.
+                        </p>
                         <pre className="bg-[#fff8e1] text-[#8B2C3B] rounded-lg p-3 overflow-x-auto border border-[#f3e6c1]">
                             {`"use client";
 import { useEffect, useState } from "react";
