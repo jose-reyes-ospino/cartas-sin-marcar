@@ -4,7 +4,7 @@ export default function Tutorial() {
     return (
         <div className="min-h-screen bg-[#f5f6fa] flex flex-col md:flex-row">
             {/* Sidebar */}
-            <aside className="w-full md:w-1/3 flex flex-col items-center justify-start py-12 px-6 md:px-10 border-b md:border-b-0 md:border-r border-[#ececec] bg-[#f5f6fa]">
+            <aside className="w-full md:w-1/3 flex flex-col items-center justify-start py-12 px-6 md:px-10 border-b md:border-b-0 md:border-r border-[#ececec] bg-[#f5f6fa] md:sticky md:top-0 md:h-screen md:overflow-y-auto">
                 <div className="flex flex-col items-center gap-4 w-full max-w-xs">
                     <div className="w-24 h-24 rounded-full bg-[#ffe6a0] flex items-center justify-center shadow-md mb-2">
                         <span className="text-4xl font-bold text-[#8B2C3B]">📚</span>
