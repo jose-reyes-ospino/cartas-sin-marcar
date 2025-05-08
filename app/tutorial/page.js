@@ -372,7 +372,7 @@ router.push("/cartas");`}
                         </pre>
                         <p className="text-[#222]">Y muestra las cartas en <b>app/cartas/page.js</b>:</p>
                         <p className="text-[#555] mb-4">
-                            Este componente también usa <b>'use client'</b> porque necesita interactividad del navegador.
+                            Este componente también usa <b>&quot;use client&quot;</b> porque necesita interactividad del navegador.
                             Utilizamos el hook <b>useEffect</b> para cargar las cartas cuando el componente se monta,
                             y <b>useState</b> para manejar el estado de las cartas y la carga.
                         </p>
