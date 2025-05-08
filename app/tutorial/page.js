@@ -72,12 +72,12 @@ export default function Tutorial() {
                                 </ul>
                                 <pre className="bg-[#fff8e1] text-[#8B2C3B] rounded-lg p-3 mt-2 mb-2 overflow-x-auto border border-[#f3e6c1]">
                                     {`const firebaseConfig = {
-  apiKey: "tu-api-key",
-  authDomain: "tu-proyecto.firebaseapp.com",
-  projectId: "tu-proyecto",
-  storageBucket: "tu-proyecto.appspot.com",
-  messagingSenderId: "tu-sender-id",
-  appId: "tu-app-id"
+  apiKey: &quot;tu-api-key&quot;,
+  authDomain: &quot;tu-proyecto.firebaseapp.com&quot;,
+  projectId: &quot;tu-proyecto&quot;,
+  storageBucket: &quot;tu-proyecto.appspot.com&quot;,
+  messagingSenderId: &quot;tu-sender-id&quot;,
+  appId: &quot;tu-app-id&quot;
 };`}
                                 </pre>
                             </li>
@@ -186,43 +186,43 @@ export async function POST(req) {
                         </pre>
                         <p className="text-[#222]">Y el formulario en <b>app/nueva-carta/page.js</b>:</p>
                         <p className="text-[#555] mb-4">
-                            La directiva <b>'use client'</b> al inicio del archivo indica que este componente se ejecutará en el navegador.
+                            La directiva <b>&apos;use client&apos;</b> al inicio del archivo indica que este componente se ejecutará en el navegador.
                             Esto es necesario porque usamos hooks de React y eventos del navegador. Sin esta directiva,
                             el componente se renderizaría en el servidor y no funcionaría correctamente.
                         </p>
                         <pre className="bg-[#fff8e1] text-[#8B2C3B] rounded-lg p-3 overflow-x-auto border border-[#f3e6c1]">
-                            {`"use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+                            {`&quot;use client&quot;;
+import { useState } from &quot;react&quot;;
+import { useRouter } from &quot;next/navigation&quot;;
 
 export default function NuevaCarta() {
-    const [nombre, setNombre] = useState("");
-    const [mensaje, setMensaje] = useState("");
+    const [nombre, setNombre] = useState(&quot;&quot;);
+    const [mensaje, setMensaje] = useState(&quot;&quot;);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        const res = await fetch("/api/firestore", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
+        const res = await fetch(&quot;/api/firestore&quot;, {
+            method: &quot;POST&quot;,
+            headers: { &quot;Content-Type&quot;: &quot;application/json&quot; },
             body: JSON.stringify({ data: { nombre, mensaje } }),
         });
         setLoading(false);
         if (res.ok) {
-            router.push("/cartas");
+            router.push(&quot;/cartas&quot;);
         } else {
-            alert("Error al enviar la carta");
+            alert(&quot;Error al enviar la carta&quot;);
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto">
-            <input className="w-full border border-[#ffe6a0] rounded px-3 py-2" value={nombre} onChange={e => setNombre(e.target.value)} placeholder="Nombre" required />
-            <textarea className="w-full border border-[#ffe6a0] rounded px-3 py-2" value={mensaje} onChange={e => setMensaje(e.target.value)} placeholder="Mensaje" required />
-            <button type="submit" className="w-full py-2 rounded-full bg-[#ffe6a0] text-[#8B2C3B] font-bold shadow-sm transition hover:bg-[#ffda6a]" disabled={loading}>
-                {loading ? "Enviando..." : "Enviar carta"}
+        <form onSubmit={handleSubmit} className=&quot;space-y-4 max-w-md mx-auto&quot;>
+            <input className=&quot;w-full border border-[#ffe6a0] rounded px-3 py-2&quot; value={nombre} onChange={e => setNombre(e.target.value)} placeholder=&quot;Nombre&quot; required />
+            <textarea className=&quot;w-full border border-[#ffe6a0] rounded px-3 py-2&quot; value={mensaje} onChange={e => setMensaje(e.target.value)} placeholder=&quot;Mensaje&quot; required />
+            <button type=&quot;submit&quot; className=&quot;w-full py-2 rounded-full bg-[#ffe6a0] text-[#8B2C3B] font-bold shadow-sm transition hover:bg-[#ffda6a]&quot; disabled={loading}>
+                {loading ? &quot;Enviando...&quot; : &quot;Enviar carta&quot;}
             </button>
         </form>
     );
